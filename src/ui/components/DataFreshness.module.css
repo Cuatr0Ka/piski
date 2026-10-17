@@ -1,0 +1,7 @@
+.valor {
+  margin-top: var(--space-4);
+}
+
+.detalle {
+  color: var(--ink-muted);
+}

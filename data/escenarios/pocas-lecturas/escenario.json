@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "id": "pocas-lecturas",
+  "group": "demo",
+  "name": "Pocas lecturas",
+  "description": "Solo hay 3 lecturas: no alcanzan para calcular un pronóstico.",
+  "now": "2026-10-15T14:30:00-06:00"
+}

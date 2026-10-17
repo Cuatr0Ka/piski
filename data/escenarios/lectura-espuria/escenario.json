@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "id": "lectura-espuria",
+  "group": "test",
+  "name": "Prueba: lectura espuria",
+  "description": "Nivel normal con una sola lectura de 950 mm entre lecturas de unos 400 mm.",
+  "now": "2026-10-15T14:30:00-06:00"
+}

@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "id": "nivel-plano",
+  "group": "test",
+  "name": "Prueba: nivel plano",
+  "description": "420 mm constantes.",
+  "now": "2026-10-15T14:30:00-06:00"
+}

@@ -1,0 +1,585 @@
+{
+  "descripcion": "Casos de referencia del pronóstico, calculados a mano (contracts/pronostico.md). Configuración de ejemplo: ventana 120 min, mínimo 6 lecturas, horizonte 6 h, estable 5.0 mm/h, umbrales 60 y 85. Cada lista de 'niveles' son lecturas cada 'pasoMin' minutos (15 por omisión), la última a 'ahoraMin' minutos del 'ahora' (0 por omisión). Piso de incertidumbre: amplitud mínima max(0.3 × ritmo, 10) mm/h.",
+  "casos": [
+    {
+      "id": "P01",
+      "descripcion": "Subida lineal exacta de 60.0 mm/h; piso de incertidumbre (amplitud 1.8). Es el caso de la maqueta aprobada.",
+      "niveles": [
+        300,
+        315,
+        330,
+        345,
+        360,
+        375,
+        390,
+        405,
+        420
+      ],
+      "esperado": {
+        "kind": "forecast",
+        "rate": 60,
+        "rateLow": 51,
+        "rateHigh": 69,
+        "startLevelMm": 420,
+        "review": {
+          "result": "range",
+          "fromH": 2.5,
+          "toH": 4
+        },
+        "stop": {
+          "result": "beyond"
+        },
+        "summary": {
+          "h": 3,
+          "lowMm": 573,
+          "highMm": 627
+        }
+      }
+    },
+    {
+      "id": "P06",
+      "descripcion": "Revisar ya superado (660 mm); No cruzar en rango. Ritmo 7, amplitud 2.1.",
+      "niveles": [
+        520,
+        537.5,
+        555,
+        572.5,
+        590,
+        607.5,
+        625,
+        642.5,
+        660
+      ],
+      "esperado": {
+        "kind": "forecast",
+        "rate": 70,
+        "rateLow": 59.5,
+        "rateHigh": 80.5,
+        "startLevelMm": 660,
+        "review": {
+          "result": "exceeded"
+        },
+        "stop": {
+          "result": "range",
+          "fromH": 2,
+          "toH": 3.5
+        },
+        "summary": {
+          "h": 3,
+          "lowMm": 838,
+          "highMm": 902
+        }
+      }
+    },
+    {
+      "id": "P07",
+      "descripcion": "Ritmo lento de 30.0 mm/h: Revisar llega 'a partir de 5.5 h' (el extremo tardío pasa del horizonte); No cruzar más allá del horizonte.",
+      "niveles": [
+        340,
+        347.5,
+        355,
+        362.5,
+        370,
+        377.5,
+        385,
+        392.5,
+        400
+      ],
+      "esperado": {
+        "kind": "forecast",
+        "rate": 30,
+        "rateLow": 25,
+        "rateHigh": 35,
+        "startLevelMm": 400,
+        "review": {
+          "result": "from",
+          "fromH": 5.5
+        },
+        "stop": {
+          "result": "beyond"
+        },
+        "summary": {
+          "h": 3,
+          "lowMm": 475,
+          "highMm": 505
+        }
+      }
+    },
+    {
+      "id": "P08",
+      "descripcion": "El nivel de partida (900 mm) ya superó No cruzar: ambos umbrales ya superados.",
+      "niveles": [
+        780,
+        795,
+        810,
+        825,
+        840,
+        855,
+        870,
+        885,
+        900
+      ],
+      "esperado": {
+        "kind": "forecast",
+        "rate": 60,
+        "rateLow": 51,
+        "rateHigh": 69,
+        "startLevelMm": 900,
+        "review": {
+          "result": "exceeded"
+        },
+        "stop": {
+          "result": "exceeded"
+        },
+        "summary": {
+          "h": 3,
+          "lowMm": 1053,
+          "highMm": 1107
+        }
+      }
+    },
+    {
+      "id": "P09",
+      "descripcion": "P01 con una sola lectura espuria (+300 mm en el índice 4): mediana de pendientes y nivel de partida no cambian; resultado igual a P01.",
+      "niveles": [
+        300,
+        315,
+        330,
+        345,
+        660,
+        375,
+        390,
+        405,
+        420
+      ],
+      "esperado": {
+        "kind": "forecast",
+        "rate": 60,
+        "rateLow": 51,
+        "rateHigh": 69,
+        "startLevelMm": 420,
+        "review": {
+          "result": "range",
+          "fromH": 2.5,
+          "toH": 4
+        },
+        "stop": {
+          "result": "beyond"
+        },
+        "summary": {
+          "h": 3,
+          "lowMm": 573,
+          "highMm": 627
+        }
+      }
+    },
+    {
+      "id": "P10",
+      "descripcion": "P01 con las lecturas en orden inverso en el archivo: se ordenan por hora; mismo resultado.",
+      "niveles": [
+        300,
+        315,
+        330,
+        345,
+        360,
+        375,
+        390,
+        405,
+        420
+      ],
+      "invertirOrden": true,
+      "esperado": {
+        "kind": "forecast",
+        "rate": 60,
+        "rateLow": 51,
+        "rateHigh": 69,
+        "startLevelMm": 420,
+        "review": {
+          "result": "range",
+          "fromH": 2.5,
+          "toH": 4
+        },
+        "stop": {
+          "result": "beyond"
+        },
+        "summary": {
+          "h": 3,
+          "lowMm": 573,
+          "highMm": 627
+        }
+      }
+    },
+    {
+      "id": "P11",
+      "descripcion": "P01 con una lectura imposible (-50 mm) intercalada: se descarta y se cuenta; mismo resultado.",
+      "niveles": [
+        300,
+        315,
+        330,
+        345,
+        360,
+        375,
+        390,
+        405,
+        420
+      ],
+      "extras": [
+        {
+          "minutosAntesDeAhora": 50,
+          "level_mm": -50
+        }
+      ],
+      "esperado": {
+        "kind": "forecast",
+        "rate": 60,
+        "rateLow": 51,
+        "rateHigh": 69,
+        "startLevelMm": 420,
+        "discardedCount": 1,
+        "review": {
+          "result": "range",
+          "fromH": 2.5,
+          "toH": 4
+        },
+        "stop": {
+          "result": "beyond"
+        },
+        "summary": {
+          "h": 3,
+          "lowMm": 573,
+          "highMm": 627
+        }
+      }
+    },
+    {
+      "id": "P12",
+      "descripcion": "Exactamente el mínimo de lecturas (6) y ritmo de 120.0 mm/h: sí se pronostica.",
+      "niveles": [
+        300,
+        330,
+        360,
+        390,
+        420,
+        450
+      ],
+      "esperado": {
+        "kind": "forecast",
+        "rate": 120,
+        "rateLow": 102,
+        "rateHigh": 138,
+        "startLevelMm": 450,
+        "review": {
+          "result": "range",
+          "fromH": 1,
+          "toH": 1.5
+        },
+        "stop": {
+          "result": "range",
+          "fromH": 2.5,
+          "toH": 4
+        },
+        "summary": {
+          "h": 3,
+          "lowMm": 756,
+          "highMm": 864
+        }
+      }
+    },
+    {
+      "id": "P13",
+      "descripcion": "Subida acelerada (ritmos de 8 a 280.0 mm/h): mediana 18, cuartiles 14 y 22 (sin piso), nivel de partida 44.5.",
+      "niveles": [
+        200,
+        220,
+        250,
+        290,
+        340,
+        400,
+        470
+      ],
+      "esperado": {
+        "kind": "forecast",
+        "rate": 180,
+        "rateLow": 140,
+        "rateHigh": 220,
+        "startLevelMm": 445,
+        "review": {
+          "result": "range",
+          "fromH": 0.5,
+          "toH": 1.5
+        },
+        "stop": {
+          "result": "range",
+          "fromH": 1.5,
+          "toH": 3
+        },
+        "summary": {
+          "h": 3,
+          "lowMm": 865,
+          "highMm": 1105
+        }
+      }
+    },
+    {
+      "id": "P14",
+      "descripcion": "Redondeo hacia afuera exacto: el tiempo temprano a Revisar es justo 2.0 h y el tardío a No cruzar justo 6.0 h (igual al horizonte: sigue siendo un rango).",
+      "niveles": [
+        170,
+        195,
+        220,
+        245,
+        270,
+        295,
+        320,
+        345,
+        370
+      ],
+      "esperado": {
+        "kind": "forecast",
+        "rate": 100,
+        "rateLow": 85,
+        "rateHigh": 115,
+        "startLevelMm": 370,
+        "review": {
+          "result": "range",
+          "fromH": 2,
+          "toH": 3
+        },
+        "stop": {
+          "result": "range",
+          "fromH": 4,
+          "toH": 6
+        },
+        "summary": {
+          "h": 3,
+          "lowMm": 625,
+          "highMm": 715
+        }
+      }
+    },
+    {
+      "id": "P15",
+      "descripcion": "El 'ahora' queda 10 min después de la última lectura: el nivel de partida se extrapola hasta ahora (42 + 6 × 10/60 = 43) y la lectura más vieja sale de la ventana.",
+      "niveles": [
+        300,
+        315,
+        330,
+        345,
+        360,
+        375,
+        390,
+        405,
+        420
+      ],
+      "ahoraMin": 10,
+      "esperado": {
+        "kind": "forecast",
+        "rate": 60,
+        "rateLow": 51,
+        "rateHigh": 69,
+        "startLevelMm": 430,
+        "review": {
+          "result": "range",
+          "fromH": 2,
+          "toH": 3.5
+        },
+        "stop": {
+          "result": "beyond"
+        },
+        "summary": {
+          "h": 3,
+          "lowMm": 583,
+          "highMm": 637
+        }
+      }
+    },
+    {
+      "id": "P16",
+      "descripcion": "La última lectura tiene exactamente 30 min de antigüedad: todavía no es vieja y se pronostica. El nivel de partida se extrapola 30 min (42 + 6 × 0.5 = 45) y la lectura más vieja sale de la ventana.",
+      "niveles": [
+        300,
+        315,
+        330,
+        345,
+        360,
+        375,
+        390,
+        405,
+        420
+      ],
+      "ahoraMin": 30,
+      "esperado": {
+        "kind": "forecast",
+        "rate": 60,
+        "rateLow": 51,
+        "rateHigh": 69,
+        "startLevelMm": 450,
+        "review": {
+          "result": "range",
+          "fromH": 2,
+          "toH": 3
+        },
+        "stop": {
+          "result": "from",
+          "fromH": 5.5
+        },
+        "summary": {
+          "h": 3,
+          "lowMm": 603,
+          "highMm": 657
+        }
+      }
+    },
+    {
+      "id": "P02",
+      "descripcion": "El nivel baja 20.0 mm/h (50 a 460 mm): no hay pronóstico de creciente.",
+      "niveles": [
+        500,
+        495,
+        490,
+        485,
+        480,
+        475,
+        470,
+        465,
+        460
+      ],
+      "esperado": {
+        "kind": "no_forecast",
+        "reason": "falling",
+        "rate": -20,
+        "readingsInWindow": 9
+      }
+    },
+    {
+      "id": "P03",
+      "descripcion": "420 mm constantes: ritmo 0, nivel estable.",
+      "niveles": [
+        420,
+        420,
+        420,
+        420,
+        420,
+        420,
+        420,
+        420,
+        420
+      ],
+      "esperado": {
+        "kind": "no_forecast",
+        "reason": "flat",
+        "rate": 0,
+        "readingsInWindow": 9
+      }
+    },
+    {
+      "id": "P04",
+      "descripcion": "Solo 5 lecturas en la ventana (el mínimo es 6): hacen falta más lecturas.",
+      "niveles": [
+        300,
+        315,
+        330,
+        345,
+        360
+      ],
+      "esperado": {
+        "kind": "no_forecast",
+        "reason": "few_readings",
+        "readingsInWindow": 5
+      }
+    },
+    {
+      "id": "P05",
+      "descripcion": "La última lectura tiene 31 min de antigüedad (más que 30): datos viejos, no se proyecta.",
+      "niveles": [
+        300,
+        315,
+        330,
+        345,
+        360,
+        375,
+        390,
+        405,
+        420
+      ],
+      "ahoraMin": 31,
+      "esperado": {
+        "kind": "no_forecast",
+        "reason": "stale",
+        "readingsInWindow": 0
+      }
+    },
+    {
+      "id": "P17",
+      "descripcion": "El ritmo es exactamente +5.0 mm/h, el límite de flat_rate_mm_h: se considera estable.",
+      "niveles": [
+        410,
+        411.25,
+        412.5,
+        413.75,
+        415,
+        416.25,
+        417.5,
+        418.75,
+        420
+      ],
+      "esperado": {
+        "kind": "no_forecast",
+        "reason": "flat",
+        "rate": 5,
+        "readingsInWindow": 9
+      }
+    },
+    {
+      "id": "P18",
+      "descripcion": "El ritmo es exactamente −5.0 mm/h: no baja de −flat_rate_mm_h, así que sigue siendo estable y no 'bajando'.",
+      "niveles": [
+        420,
+        418.75,
+        417.5,
+        416.25,
+        415,
+        413.75,
+        412.5,
+        411.25,
+        410
+      ],
+      "esperado": {
+        "kind": "no_forecast",
+        "reason": "flat",
+        "rate": -5,
+        "readingsInWindow": 9
+      }
+    },
+    {
+      "id": "P19",
+      "descripcion": "Una lectura de −5 y otra de 999 se descartan y quedan solo 5 lecturas válidas: hacen falta más lecturas.",
+      "niveles": [
+        300,
+        315,
+        -50,
+        345,
+        9990,
+        375,
+        390
+      ],
+      "esperado": {
+        "kind": "no_forecast",
+        "reason": "few_readings",
+        "readingsInWindow": 5,
+        "discardedCount": 2
+      }
+    },
+    {
+      "id": "P20",
+      "descripcion": "Sin ninguna lectura: no se proyecta.",
+      "niveles": [],
+      "ahoraIso": "2026-10-15T14:30:00-06:00",
+      "esperado": {
+        "kind": "no_forecast",
+        "reason": "stale",
+        "readingsInWindow": 0
+      }
+    }
+  ]
+}

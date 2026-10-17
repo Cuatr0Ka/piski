@@ -1,0 +1,17 @@
+.rotulo {
+  color: var(--ink-muted);
+}
+
+.frase {
+  margin: var(--space-1) 0 var(--space-5);
+}
+
+.pie {
+  padding-top: var(--space-3);
+  border-top: var(--stroke-divider) solid var(--border);
+}
+
+.aviso {
+  margin-top: var(--space-3);
+  color: var(--ink-muted);
+}

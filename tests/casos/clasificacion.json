@@ -1,0 +1,292 @@
+{
+  "descripcion": "Casos de referencia de la clasificación del estado (contracts/clasificacion-estado.md), calculados a mano. Configuración de ejemplo: Revisar 60, No cruzar 85, subir con 3 lecturas, bajar con 5, vieja a los 30 min. Lecturas cada 15 min; 'ahoraMin' = minutos entre la última lectura y el 'ahora' (5 por omisión). Si un caso falla, se revisa la regla en conjunto: NO se ajusta el resultado esperado para que 'pase'.",
+  "casos": [
+    {
+      "id": "C01",
+      "descripcion": "Todas las lecturas por debajo de Revisar.",
+      "niveles": [
+        420,
+        430,
+        440
+      ],
+      "esperado": {
+        "kind": "normal"
+      }
+    },
+    {
+      "id": "C02",
+      "descripcion": "Espuria: las últimas 3 incluyen dos normales; no sube.",
+      "niveles": [
+        420,
+        430,
+        700
+      ],
+      "esperado": {
+        "kind": "normal"
+      }
+    },
+    {
+      "id": "C03",
+      "descripcion": "Espuria al final: las últimas 3 son 43, 44 y 70.",
+      "niveles": [
+        420,
+        430,
+        440,
+        700
+      ],
+      "esperado": {
+        "kind": "normal"
+      }
+    },
+    {
+      "id": "C04",
+      "descripcion": "Arranque: una sola lectura en No cruzar da No cruzar.",
+      "niveles": [
+        900
+      ],
+      "esperado": {
+        "kind": "stop"
+      }
+    },
+    {
+      "id": "C05",
+      "descripcion": "Arranque: la banda más alta de las lecturas disponibles.",
+      "niveles": [
+        900,
+        420
+      ],
+      "esperado": {
+        "kind": "stop"
+      }
+    },
+    {
+      "id": "C06",
+      "descripcion": "Las últimas 3 (70, 71, 72) están en Revisar: sube.",
+      "niveles": [
+        420,
+        430,
+        700,
+        710,
+        720
+      ],
+      "esperado": {
+        "kind": "review"
+      }
+    },
+    {
+      "id": "C07",
+      "descripcion": "Un valor igual al umbral cuenta como alcanzado: las últimas 3 son 60.",
+      "niveles": [
+        500,
+        500,
+        600,
+        600,
+        600
+      ],
+      "esperado": {
+        "kind": "review"
+      }
+    },
+    {
+      "id": "C08",
+      "descripcion": "Solo 4 lecturas bajas; bajar exige 5.",
+      "niveles": [
+        900,
+        900,
+        900,
+        500,
+        500,
+        500,
+        500
+      ],
+      "esperado": {
+        "kind": "stop"
+      }
+    },
+    {
+      "id": "C09",
+      "descripcion": "5 lecturas seguidas bajas: baja a Normal.",
+      "niveles": [
+        900,
+        900,
+        900,
+        500,
+        500,
+        500,
+        500,
+        500
+      ],
+      "esperado": {
+        "kind": "normal"
+      }
+    },
+    {
+      "id": "C10",
+      "descripcion": "5 lecturas en Revisar: baja de No cruzar a Revisar.",
+      "niveles": [
+        900,
+        900,
+        900,
+        700,
+        700,
+        700,
+        700,
+        700
+      ],
+      "esperado": {
+        "kind": "review"
+      }
+    },
+    {
+      "id": "C11",
+      "descripcion": "Hueco exactamente igual al máximo (30 min): no reinicia; solo 4 lecturas, no baja.",
+      "niveles": [
+        900,
+        900,
+        900,
+        500
+      ],
+      "huecos": {
+        "3": 30
+      },
+      "esperado": {
+        "kind": "stop"
+      }
+    },
+    {
+      "id": "C12",
+      "descripcion": "Hueco mayor que el máximo (31 min): reinicia; arranque con una lectura normal.",
+      "niveles": [
+        900,
+        900,
+        900,
+        500
+      ],
+      "huecos": {
+        "3": 31
+      },
+      "esperado": {
+        "kind": "normal"
+      }
+    },
+    {
+      "id": "C13",
+      "descripcion": "Sin lecturas.",
+      "niveles": [],
+      "ahoraIso": "2026-10-15T14:30:00-06:00",
+      "esperado": {
+        "kind": "nodata",
+        "noDataReason": "none"
+      }
+    },
+    {
+      "id": "C14",
+      "descripcion": "La última lectura tiene 31 min: más vieja que 30.",
+      "niveles": [
+        420,
+        430,
+        440
+      ],
+      "ahoraMin": 31,
+      "esperado": {
+        "kind": "nodata",
+        "noDataReason": "stale"
+      }
+    },
+    {
+      "id": "C15",
+      "descripcion": "La última lectura tiene exactamente 30 min: no es vieja.",
+      "niveles": [
+        420,
+        430,
+        440
+      ],
+      "ahoraMin": 30,
+      "esperado": {
+        "kind": "normal"
+      }
+    },
+    {
+      "id": "C16",
+      "descripcion": "Se descarta la lectura de -5; quedan 42, 44 y 43.",
+      "niveles": [
+        420,
+        -50,
+        440,
+        430
+      ],
+      "esperado": {
+        "kind": "normal",
+        "discardedCount": 1
+      }
+    },
+    {
+      "id": "C17",
+      "descripcion": "Una lectura con hora 'ahora' + 61 s se descarta por futura; no queda ninguna.",
+      "niveles": [],
+      "ahoraIso": "2026-10-15T14:30:00-06:00",
+      "explicitas": [
+        {
+          "segundosDespuesDeAhora": 61,
+          "level_mm": 420
+        }
+      ],
+      "esperado": {
+        "kind": "nodata",
+        "noDataReason": "insufficient",
+        "discardedCount": 1
+      }
+    },
+    {
+      "id": "C18",
+      "descripcion": "Un adelanto exacto de 60 s se conserva.",
+      "niveles": [],
+      "ahoraIso": "2026-10-15T14:30:00-06:00",
+      "explicitas": [
+        {
+          "segundosDespuesDeAhora": 60,
+          "level_mm": 420
+        }
+      ],
+      "esperado": {
+        "kind": "normal"
+      }
+    },
+    {
+      "id": "C19",
+      "descripcion": "En el archivo vienen fuera de orden (44, 42, 43): se ordenan por hora antes de evaluar.",
+      "niveles": [
+        420,
+        430,
+        440
+      ],
+      "ordenArchivo": [
+        2,
+        0,
+        1
+      ],
+      "esperado": {
+        "kind": "normal"
+      }
+    },
+    {
+      "id": "C20",
+      "descripcion": "Dos lecturas con la misma hora (40 y luego 90): vale la que aparece después en el archivo.",
+      "niveles": [],
+      "ahoraIso": "2026-10-15T14:30:00-06:00",
+      "explicitas": [
+        {
+          "minutosAntesDeAhora": 5,
+          "level_mm": 400
+        },
+        {
+          "minutosAntesDeAhora": 5,
+          "level_mm": 900
+        }
+      ],
+      "esperado": {
+        "kind": "stop"
+      }
+    }
+  ]
+}

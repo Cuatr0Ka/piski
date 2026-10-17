@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "id": "tormenta-normal",
+  "group": "demo",
+  "name": "Tormenta normal",
+  "description": "Nivel estable alrededor de 400 mm con ruido leve y lluvia ligera.",
+  "now": "2026-10-15T14:30:00-06:00"
+}

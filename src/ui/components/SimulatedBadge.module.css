@@ -1,0 +1,10 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--space-3);
+  background: var(--surface-sunken);
+  border: var(--stroke-base) dashed var(--border-strong);
+  border-radius: var(--radius-pill);
+  color: var(--ink);
+  white-space: nowrap;
+}

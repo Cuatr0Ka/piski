@@ -1,0 +1,31 @@
+.lista {
+  margin: 0;
+}
+
+.renglon {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-top: var(--stroke-divider) solid var(--border);
+}
+
+.etiqueta {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.valor {
+  display: grid;
+  justify-items: end;
+  margin: 0;
+  max-width: 60%;
+  text-align: right;
+  text-wrap: balance;
+}
+
+.sub {
+  color: var(--ink-muted);
+}

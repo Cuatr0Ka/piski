@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "id": "ciclon-inicio",
+  "group": "demo",
+  "name": "Ciclón: inicio de la creciente",
+  "description": "El nivel sube de forma sostenida bajo lluvia intensa; el pronóstico estima cuándo llegaría a Revisar.",
+  "now": "2026-10-15T14:30:00-06:00"
+}

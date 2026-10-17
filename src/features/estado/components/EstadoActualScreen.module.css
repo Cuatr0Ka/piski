@@ -1,0 +1,38 @@
+.aviso {
+  margin-bottom: var(--space-6);
+}
+
+.cabecera {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.rol {
+  color: var(--ink-muted);
+}
+
+/* Fila superior: estado (7/12) y mensaje para avisar (5/12). */
+.superior {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: var(--space-6);
+  align-items: stretch;
+  margin-bottom: var(--space-6);
+}
+
+/* Fila de indicadores: nivel, lluvia y antigüedad del dato, en tres tarjetas. */
+.indicadores {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-6);
+  align-items: stretch;
+}
+
+@media (max-width: 1100px) {
+  .superior,
+  .indicadores {
+    grid-template-columns: 1fr;
+  }
+}

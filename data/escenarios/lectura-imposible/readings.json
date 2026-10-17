@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "readings": [
+    { "timestamp": "2026-10-15T09:12:00-06:00", "level_mm": 404.1, "rain_mm": 0.2, "simulated": true },
+    { "timestamp": "2026-10-15T09:27:00-06:00", "level_mm": 403.8, "rain_mm": 0.2, "simulated": true },
+    { "timestamp": "2026-10-15T09:42:00-06:00", "level_mm": 397.9, "rain_mm": 0.2, "simulated": true },
+    { "timestamp": "2026-10-15T09:57:00-06:00", "level_mm": 395.1, "rain_mm": 0.2, "simulated": true },
+    { "timestamp": "2026-10-15T10:12:00-06:00", "level_mm": 399.5, "rain_mm": 0.2, "simulated": true },
+    { "timestamp": "2026-10-15T10:27:00-06:00", "level_mm": 404.6, "rain_mm": 0.2, "simulated": true },
+    { "timestamp": "2026-10-15T10:42:00-06:00", "level_mm": 403.0, "rain_mm": 0.2, "simulated": true },
+    { "timestamp": "2026-10-15T10:57:00-06:00", "level_mm": 397.0, "rain_mm": 0.2, "simulated": true },
+    { "timestamp": "2026-10-15T11:12:00-06:00", "level_mm": 395.4, "rain_mm": 0.2, "simulated": true },
+    { "timestamp": "2026-10-15T11:27:00-06:00", "level_mm": 400.5, "rain_mm": 0.2, "simulated": true },
+    { "timestamp": "2026-10-15T11:42:00-06:00", "level_mm": 404.9, "rain_mm": 0.2, "simulated": true },
+    { "timestamp": "2026-10-15T11:57:00-06:00", "level_mm": 402.1, "rain_mm": 0.2, "simulated": true },
+    { "timestamp": "2026-10-15T12:12:00-06:00", "level_mm": 396.2, "rain_mm": 0.2, "simulated": true },
+    { "timestamp": "2026-10-15T12:13:00-06:00", "level_mm": 9990.0, "rain_mm": 0.0, "simulated": true },
+    { "timestamp": "2026-10-15T12:27:00-06:00", "level_mm": 395.9, "rain_mm": 0.2, "simulated": true },
+    { "timestamp": "2026-10-15T12:42:00-06:00", "level_mm": 401.6, "rain_mm": 0.2, "simulated": true },
+    { "timestamp": "2026-10-15T12:57:00-06:00", "level_mm": 405.0, "rain_mm": 0.2, "simulated": true },
+    { "timestamp": "2026-10-15T13:12:00-06:00", "level_mm": 401.1, "rain_mm": 0.2, "simulated": true },
+    { "timestamp": "2026-10-15T13:27:00-06:00", "level_mm": 395.6, "rain_mm": 0.2, "simulated": true },
+    { "timestamp": "2026-10-15T13:42:00-06:00", "level_mm": 396.6, "rain_mm": 0.2, "simulated": true },
+    { "timestamp": "2026-10-15T13:43:00-06:00", "level_mm": -50.0, "rain_mm": 0.0, "simulated": true },
+    { "timestamp": "2026-10-15T13:57:00-06:00", "level_mm": 402.6, "rain_mm": 0.2, "simulated": true },
+    { "timestamp": "2026-10-15T14:12:00-06:00", "level_mm": 404.8, "rain_mm": 0.2, "simulated": true },
+    { "timestamp": "2026-10-15T14:27:00-06:00", "level_mm": 400.0, "rain_mm": 0.2, "simulated": true }
+  ]
+}

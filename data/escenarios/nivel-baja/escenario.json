@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "id": "nivel-baja",
+  "group": "test",
+  "name": "Prueba: nivel que baja",
+  "description": "Pico de unos 500 mm y bajada de unos 20 mm/h hasta 450 mm.",
+  "now": "2026-10-15T14:30:00-06:00"
+}

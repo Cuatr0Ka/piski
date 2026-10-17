@@ -1,0 +1,91 @@
+.lienzo {
+  position: relative;
+  margin: 0 auto;
+  background: var(--surface);
+  border: var(--stroke-base) solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.municipioA {
+  fill: var(--accent-soft);
+  stroke: var(--border-strong);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.municipioB {
+  fill: var(--surface-sunken);
+  stroke: var(--border-strong);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.cauce {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-opacity: 0.55;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.arroyo {
+  fill: none;
+  stroke: var(--accent-strong);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.presa {
+  fill: var(--accent);
+  fill-opacity: 0.7;
+  stroke: var(--accent-strong);
+  stroke-width: 1;
+}
+
+.lugar {
+  fill: var(--ink);
+}
+
+.lugarTexto {
+  fill: var(--ink);
+  paint-order: stroke;
+  stroke: var(--surface-raised);
+  stroke-width: 4px;
+}
+
+.municipioTexto {
+  fill: var(--ink-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  paint-order: stroke;
+  stroke: var(--surface-raised);
+  stroke-width: 5px;
+  pointer-events: none;
+}
+
+/* Baliza: botón circular sobre el mapa, centrado en su punto geográfico. */
+.baliza {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  background: var(--surface-raised);
+  border: var(--stroke-focus) solid var(--surface-raised);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+}
+
+.activa {
+  border-color: var(--accent);
+}

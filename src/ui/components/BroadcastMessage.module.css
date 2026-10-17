@@ -1,0 +1,26 @@
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+/* El mensaje es una cita con barra lateral de acento. */
+.cita {
+  margin: 0 0 var(--space-5);
+  padding: var(--space-3) var(--space-5);
+  background: var(--surface);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-sm);
+}
+
+.accion {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.nota {
+  margin-top: var(--space-3);
+  color: var(--ink-muted);
+}

@@ -1,0 +1,13 @@
+.notice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--accent-soft);
+  border: var(--stroke-base) solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.notice svg {
+  flex: none;
+}

@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "readings": [
+    { "timestamp": "2026-10-15T13:57:00-06:00", "level_mm": 380.0, "rain_mm": 0.4, "simulated": true },
+    { "timestamp": "2026-10-15T14:12:00-06:00", "level_mm": 400.0, "rain_mm": 0.4, "simulated": true },
+    { "timestamp": "2026-10-15T14:27:00-06:00", "level_mm": 420.0, "rain_mm": 0.4, "simulated": true }
+  ]
+}

@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maqueta · Pronóstico de creciente</title>
+<link rel="stylesheet" href="maqueta.css">
+</head>
+<body>
+<div id="cabecera"></div>
+<main class="page" id="vista"></main>
+<script src="maqueta.js"></script>
+<script>
+// Umbrales de ejemplo (supuestos). Eje vertical de 0 a 1250 mm; eje horizontal en horas respecto a "ahora".
+const UMB = { revisar: 600, nocruzar: 850, paso: 1000 };
+
+// Serie real de las últimas 6 h, una lectura cada 15 min. La última coincide exactamente con el nivel actual.
+function serie(f, tmax = 0) {
+  const pts = [];
+  for (let i = 0; i <= 24; i++) {
+    const t = -6 + i * 0.25;
+    if (t > tmax) break;
+    pts.push([t, t === tmax ? f(t) : f(t) + 8 * Math.sin(i * 2.1)]);
+  }
+  return pts;
+}
+
+const VARIANTES = {
+  subiendo: {
+    real: serie(t => t < -2 ? 140 + 40 * (t + 6) : 300 + 60 * (t + 2)),
+    proy: { ritmo: 60, bajo: 50, alto: 70, desde: 420 },
+    conclusion: 'Podría llegar a Revisar entre 2.5 y 4 h',
+    filas: [['warn', 'Revisar (600 mm)', 'entre 2.5 y 4\u00a0h'], ['stop', 'No cruzar (850 mm)', 'No se proyecta en las pr\u00f3ximas 6\u00a0h']],
+    nivel: '420 mm', antig: 'hace 3 min', lluvia: '30.6 mm',
+    ritmo: '+60.0 mm/h', ritmoNota: 'entre +50.0 y +70.0 mm/h',
+    proyectado: 'entre 570 y 630 mm en 3\u00a0h',
+  },
+  superado: {
+    real: serie(t => t < -2 ? 300 + 55 * (t + 6) : 520 + 70 * (t + 2)),
+    proy: { ritmo: 70, bajo: 60, alto: 80, desde: 660 },
+    conclusion: 'Ya superó Revisar. Podría llegar a No cruzar entre 2.5 y 3.5 h',
+    filas: [['warn', 'Revisar (600 mm)', 'ya superado'], ['stop', 'No cruzar (850 mm)', 'entre 2.5 y 3.5 h']],
+    nivel: '660 mm', antig: 'hace 3 min', lluvia: '42.0 mm',
+    ritmo: '+70.0 mm/h', ritmoNota: 'entre +60.0 y +80.0 mm/h',
+    proyectado: 'entre 840 y 900 mm en 3\u00a0h',
+  },
+  bajando: {
+    real: serie(t => t < -2.5 ? 200 + (300 / 3.5) * (t + 6) : 500 - 20 * (t + 2.5)),
+    neutra: true,
+    titulo: 'Sin pronóstico de creciente',
+    razon: 'El nivel está bajando (−20.0 mm/h).',
+    accion: 'No hay aviso de creciente. Sigue vigilando el arroyo.',
+    nivel: '450 mm', antig: 'hace 3 min', lluvia: '0.0 mm',
+    ritmo: '−20.0 mm/h',
+  },
+  pocas: {
+    real: [[-0.5, 380], [-0.25, 400], [0, 420]],
+    neutra: true,
+    titulo: 'Sin pronóstico: hacen falta más lecturas',
+    razon: 'Hay 3 lecturas y se necesitan al menos 6 para calcular el ritmo.',
+    accion: 'Espera unos minutos. Mientras tanto, usa Estado actual.',
+    nivel: '420 mm', antig: 'hace 1 min', lluvia: '12.0 mm',
+    ritmo: 'Sin calcular',
+  },
+  viejos: {
+    real: serie(t => 480 + 20 * (t + 3), -3),
+    neutra: true,
+    titulo: 'Sin pronóstico: datos viejos',
+    razon: 'La última lectura es de las 11:30, hace 3 h.',
+    accion: 'No uses esta proyección. Revisa el arroyo en persona.',
+    nivelEtiqueta: 'Último nivel conocido', nivel: '480 mm', antig: 'sin lecturas desde las 11:30',
+    ritmo: 'Sin calcular',
+  },
+};
+
+function grafica(d) {
+  const W = 800, H = 420, ml = 56, mr = 24, mt = 30, mb = 44;
+  const conProy = !!d.proy;
+  const tmin = -6, tmax = conProy ? 6 : 0;
+  const x = t => ml + (t - tmin) / (tmax - tmin) * (W - ml - mr);
+  const y = v => mt + (1 - v / 1250) * (H - mt - mb);
+  const f = n => n.toFixed(1);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Gráfica del nivel del arroyo en mm: últimas 6 horas${conProy ? ' y proyección de las próximas 6 horas' : ''}" font-family="Inter, Segoe UI, sans-serif">`;
+  // Rejilla y eje vertical
+  for (let v = 0; v <= 1250; v += 250) {
+    s += `<line x1="${ml}" x2="${W - mr}" y1="${f(y(v))}" y2="${f(y(v))}" stroke="var(--border)" stroke-width="1"/>`;
+    s += `<text x="${ml - 10}" y="${f(y(v) + 4)}" text-anchor="end" font-size="13" fill="var(--ink-muted)">${v}</text>`;
+  }
+  s += `<text x="${ml - 10}" y="${mt - 18}" text-anchor="end" font-size="13" fill="var(--ink-muted)">mm</text>`;
+  // Eje horizontal
+  const paso = conProy ? 2 : 1;
+  for (let t = tmin; t <= tmax; t += paso) {
+    const txt = t === 0 ? 'ahora' : (t > 0 ? '+' + t + ' h' : '−' + Math.abs(t) + ' h');
+    s += `<text x="${f(x(t))}" y="${H - 16}" text-anchor="middle" font-size="13" fill="var(--ink-muted)">${txt}</text>`;
+  }
+  s += `<line x1="${ml}" x2="${W - mr}" y1="${f(y(0))}" y2="${f(y(0))}" stroke="var(--ink)" stroke-width="2"/>`;
+  s += `<line x1="${ml}" x2="${ml}" y1="${mt}" y2="${f(y(0))}" stroke="var(--ink)" stroke-width="2"/>`;
+  // Banda de incertidumbre y proyección
+  if (conProy) {
+    const p = d.proy, hs = [0, 1, 2, 3, 4, 5, 6];
+    const alto = hs.map(h => `${f(x(h))},${f(y(p.desde + p.alto * h))}`);
+    const bajo = hs.map(h => `${f(x(h))},${f(y(p.desde + p.bajo * h))}`).reverse();
+    s += `<polygon points="${alto.concat(bajo).join(' ')}" fill="var(--accent-soft)"/>`;
+    s += `<polyline points="${alto.join(' ')}" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="3 4"/>`;
+    s += `<polyline points="${bajo.reverse().join(' ')}" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="3 4"/>`;
+  }
+  // Umbrales
+  [['revisar', 'Revisar', 'var(--warn-text)', ''], ['nocruzar', 'No cruzar', 'var(--stop-text)', ''], ['paso', 'Paso', 'var(--ink-muted)', '2 4']].forEach(([k, nombre, color, dash]) => {
+    const yy = y(UMB[k]), texto = `${nombre}: ${UMB[k]} mm`, ancho = texto.length * 7.4 + 14;
+    s += `<line x1="${ml}" x2="${W - mr}" y1="${f(yy)}" y2="${f(yy)}" stroke="${color}" stroke-width="2" ${dash ? `stroke-dasharray="${dash}"` : ''}/>`;
+    s += `<rect x="${ml + 8}" y="${f(yy - 25)}" width="${f(ancho)}" height="21" fill="var(--surface-raised)"/>`;
+    s += `<text x="${ml + 14}" y="${f(yy - 9)}" font-size="13" font-weight="600" fill="${color}">${texto}</text>`;
+  });
+  // Línea de "ahora"
+  s += `<line x1="${f(x(0))}" x2="${f(x(0))}" y1="${mt}" y2="${f(y(0))}" stroke="var(--ink)" stroke-width="2" stroke-dasharray="2 5"/>`;
+  // Proyección central y serie real
+  if (conProy) {
+    const p = d.proy;
+    s += `<polyline points="${[0, 6].map(h => `${f(x(h))},${f(y(p.desde + p.ritmo * h))}`).join(' ')}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="8 6"/>`;
+  }
+  s += `<polyline points="${d.real.map(([t, v]) => `${f(x(t))},${f(y(v))}`).join(' ')}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/>`;
+  if (d.real.length < 6) d.real.forEach(([t, v]) => { s += `<circle cx="${f(x(t))}" cy="${f(y(v))}" r="4" fill="var(--accent)"/>`; });
+  return s + '</svg>';
+}
+
+function leyenda(conProy) {
+  return `<div class="legend">
+    <span><i style="width:24px;border-top:2px solid var(--accent)"></i>Nivel real</span>
+    ${conProy ? `<span><i style="width:24px;border-top:2px dashed var(--accent)"></i>Proyección</span>
+    <span><i style="width:24px;height:12px;background:var(--accent-soft);border:1.5px dashed var(--accent)"></i>Banda de incertidumbre</span>` : ''}
+  </div>`;
+}
+
+function tabla(d) {
+  const filas = d.real.filter(([t]) => Number.isInteger(t) && t % 2 === 0).map(([t, v]) => `<tr><td>${t === 0 ? 'ahora' : '−' + Math.abs(t) + ' h'}</td><td>${v.toFixed(0)} mm</td><td>Medido</td></tr>`);
+  if (d.proy) [2, 4, 6].forEach(h => filas.push(`<tr><td>+${h} h</td><td>entre ${d.proy.desde + d.proy.bajo * h} y ${d.proy.desde + d.proy.alto * h} mm</td><td>Proyección</td></tr>`));
+  return `<table><thead><tr><th>Hora</th><th>Nivel</th><th>Origen</th></tr></thead><tbody>${filas.join('')}</tbody></table>`;
+}
+
+const val = t => `<strong class="${t.length > 16 ? 'long' : ''}">${t}</strong>`;
+
+function dibujar(id, conAviso) {
+  const d = VARIANTES[id];
+  const conclusion = d.neutra
+    ? `<section class="card card-main concl-neutral" aria-labelledby="t-concl">
+         <div class="concl-label" id="t-concl">Conclusión</div>
+         <div class="concl-head" style="margin:4px 0 16px">${icono('info', 32)}<div class="concl" style="margin:0">${d.titulo}</div></div>
+         <p class="concl-detail"><b>${d.razon}</b> ${d.accion}</p>
+         <div class="row"><span class="grow label">${d.nivelEtiqueta || 'Nivel actual'}</span>${val(d.nivel)}</div>
+         <div class="row"><span class="grow label">Ritmo actual</span><strong>${d.ritmo}</strong></div>
+         ${d.lluvia ? `<div class="row"><span class="grow label">Lluvia en la última hora</span>${val(d.lluvia)}</div>` : ''}
+         <div class="row"><span class="grow label">Última lectura</span>${val(d.antig)}</div>
+       </section>`
+    :`<section class="card card-main" aria-labelledby="t-concl">
+         <div class="concl-label" id="t-concl">Conclusión</div>
+         <div class="concl">${d.conclusion}</div>
+         ${d.filas.map(([e, nombre, tiempo]) => `<div class="row">${forma(e, 24)}<span class="grow label">${nombre}</span>${val(tiempo)}</div>`).join('')}
+         <div class="row"><span class="grow label">Nivel actual</span><strong>${d.nivel}</strong></div>
+         <div class="row"><span class="grow label">Ritmo actual</span><span style="text-align:right"><strong>${d.ritmo}</strong><br><span class="caption">${d.ritmoNota}</span></span></div>
+         <div class="row"><span class="grow label">Nivel proyectado</span>${val(d.proyectado)}</div>
+         <div class="row"><span class="grow label">Lluvia en la última hora</span>${val(d.lluvia)}</div>
+         <div class="row"><span class="grow label">Última lectura</span>${val(d.antig)}</div>
+         <div class="row" style="display:block"><span class="tag">Proyección, no medición</span>
+           <p class="caption" style="margin-top:12px">Una lluvia intensa puede acelerar la subida y hacer que esta proyección se quede corta.</p></div>
+       </section>`;
+  document.getElementById('vista').innerHTML = `
+    ${conAviso ? avisoSinRed('14:27') : ''}
+    <div class="page-head"><h1>Pronóstico de creciente</h1><span class="role">Para: comité</span></div>
+    <div class="grid grid-pron">
+      <div class="stack">
+        ${conclusion}
+      </div>
+      <div class="stack">
+        <section class="card chart-wrap" aria-labelledby="t-graf">
+          <div class="card-head"><h2 class="card-title" id="t-graf">Nivel${d.proy ? ' y proyección' : ''}</h2><span class="tag tag-sim">Datos simulados</span></div>
+          <p class="caption" style="margin:-8px 0 8px">${d.proy ? 'Últimas 6 h y próximas 6 h' : 'Últimas 6 h'} · nivel en mm</p>
+          ${grafica(d)}
+          ${leyenda(!!d.proy)}
+          <details style="margin-top:16px"><summary>Ver datos como tabla</summary>${tabla(d)}</details>
+        </section>
+      </div>
+    </div>
+    <section class="card" style="margin-top:24px" aria-labelledby="t-metodo">
+      <div class="card-head"><h2 class="card-title" id="t-metodo">Cómo se calcula</h2><span class="tag tag-assume">Supuesto</span></div>
+      <p style="margin-bottom:16px">Se extrapola el ritmo de subida de las últimas 2 h. El rango sale de cuánto varía ese ritmo y se ensancha con el tiempo. Es una proyección didáctica, no un modelo hidrológico validado ni un sustituto de una alerta oficial. <b>Una lluvia intensa puede acelerar la subida y hacer que esta proyección se quede corta.</b></p>
+      <details><summary>Ver parámetros</summary>
+        <table><tbody>
+          <tr><th>Ventana de cálculo</th><td>2 h</td></tr>
+          <tr><th>Mínimo de lecturas</th><td>6</td></tr>
+          <tr><th>Horizonte máximo</th><td>6 h</td></tr>
+        </tbody></table>
+      </details>
+    </section>`;
+}
+
+document.getElementById('cabecera').innerHTML = cabecera('pronostico');
+montarVariantes(
+  [['subiendo', 'Subiendo'], ['superado', 'Revisar superado'], ['bajando', 'Bajando'], ['pocas', 'Pocas lecturas'], ['viejos', 'Datos viejos'], ['sinred', 'Sin conexión (Sprint 2B, opcional)']],
+  'subiendo',
+  id => id === 'sinred' ? dibujar('subiendo', true) : dibujar(id, false)
+);
+</script>
+</body>
+</html>

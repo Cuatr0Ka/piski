@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "id": "subida-acelerada",
+  "group": "test",
+  "name": "Prueba: subida acelerada",
+  "description": "El ritmo crece de unos 40 a unos 100 mm/h; el nivel final es 520 mm.",
+  "now": "2026-10-15T14:30:00-06:00"
+}

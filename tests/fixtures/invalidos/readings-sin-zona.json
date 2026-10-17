@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "readings": [
+    { "timestamp": "2026-10-15T14:00:00", "level_mm": 420.0, "rain_mm": 0.0, "simulated": true }
+  ]
+}

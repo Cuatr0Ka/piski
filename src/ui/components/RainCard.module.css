@@ -1,0 +1,15 @@
+.principal {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  margin: var(--space-4) 0 var(--space-3);
+}
+
+.suave {
+  color: var(--ink-muted);
+}
+
+.mensaje {
+  margin-top: var(--space-4);
+  color: var(--ink-muted);
+}

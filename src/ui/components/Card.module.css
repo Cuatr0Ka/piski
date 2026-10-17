@@ -1,0 +1,11 @@
+.card {
+  background: var(--surface-raised);
+  border: var(--stroke-base) solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-6);
+}
+
+.main {
+  box-shadow: var(--shadow-md);
+}

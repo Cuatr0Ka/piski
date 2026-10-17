@@ -1,0 +1,19 @@
+.franja {
+  background: var(--surface-raised);
+  border-bottom: var(--stroke-divider) solid var(--border);
+}
+
+.interior {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  padding: var(--space-3) var(--space-8);
+}
+
+.texto {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--ink-muted);
+}

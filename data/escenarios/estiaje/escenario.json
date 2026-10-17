@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "id": "estiaje",
+  "group": "demo",
+  "name": "Estiaje",
+  "description": "Nivel bajo que baja despacio (de 200 a 150 mm) y sin lluvia.",
+  "now": "2026-10-15T14:30:00-06:00"
+}

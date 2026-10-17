@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "id": "lecturas-viejas",
+  "group": "demo",
+  "name": "Lecturas viejas",
+  "description": "La última lectura es de hace 3 h: el panel dice \"Sin datos\" y nunca muestra un verde falso.",
+  "now": "2026-10-15T14:30:00-06:00"
+}

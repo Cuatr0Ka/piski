@@ -1,0 +1,64 @@
+.cabecera {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.rol {
+  color: var(--ink-muted);
+}
+
+/* Conclusión a la izquierda (4/12) y gráfica a la derecha (8/12); se apilan si la ventana se reduce. */
+.rejilla {
+  display: grid;
+  grid-template-columns: 4fr 8fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.columna {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.metodo {
+  margin-top: var(--space-6);
+}
+
+.metodoCabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.resumen {
+  margin-bottom: var(--space-4);
+}
+
+.parametros {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.parametros div {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.parametros dt {
+  min-width: 220px;
+  font-weight: 600;
+}
+
+.parametros dd {
+  margin: 0;
+}
+
+@media (max-width: 1000px) {
+  .rejilla {
+    grid-template-columns: 1fr;
+  }
+}

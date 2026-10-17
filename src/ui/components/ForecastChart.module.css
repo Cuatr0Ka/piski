@@ -1,0 +1,71 @@
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.subtitulo {
+  margin: var(--space-1) 0 var(--space-2);
+  color: var(--ink-muted);
+}
+
+.grafica {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-6);
+  margin-top: var(--space-3);
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.trazoReal,
+.trazoProyeccion,
+.muestraBanda {
+  display: inline-block;
+  width: var(--space-6);
+}
+
+.trazoReal {
+  border-top: var(--stroke-chart) solid var(--accent);
+}
+
+.trazoProyeccion {
+  border-top: var(--stroke-chart) dashed var(--accent);
+}
+
+.muestraBanda {
+  height: var(--space-3);
+  background: var(--accent-soft);
+  border: var(--stroke-divider) dashed var(--accent);
+}
+
+.tabla {
+  margin-top: var(--space-4);
+}
+
+.datos {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.datos th,
+.datos td {
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  border-top: var(--stroke-divider) solid var(--border);
+}
+
+.datos th {
+  font-weight: 600;
+}

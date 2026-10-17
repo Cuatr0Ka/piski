@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maqueta · Estado actual</title>
+<link rel="stylesheet" href="maqueta.css">
+</head>
+<body>
+<div id="cabecera"></div>
+<main class="page" id="vista"></main>
+<script src="maqueta.js"></script>
+<script>
+// Umbrales de ejemplo (supuestos): Revisar 600 mm, No cruzar 850 mm, paso 1000 mm. Escala del medidor: 0 a 1200 mm.
+const UMBRALES = { revisar: 600, nocruzar: 850, paso: 1000, max: 1200 };
+
+const VARIANTES = {
+  normal: { estado: 'ok', nivel: 420, lluvia: [4, 9, 15], palabra: 'Normal', corto: 'Paso seguro',
+    mensaje: 'El paso está normal. No hay aviso que dar.',
+    antiguedad: 'Última lectura hace 3 min', hora: '15 oct, 14:27', siguiente: 'Faltan 180 mm para Revisar' },
+  revisar: { estado: 'warn', nivel: 660, lluvia: [42, 110, 172], palabra: 'Revisar', corto: 'Revisa el paso antes de cruzar',
+    mensaje: 'El arroyo está en Revisar. Pedimos que revisen el paso antes de cruzar.',
+    antiguedad: 'Última lectura hace 3 min', hora: '15 oct, 14:27', siguiente: 'Faltan 190 mm para No cruzar' },
+  nocruzar: { estado: 'stop', nivel: 910, lluvia: [55, 140, 230], palabra: 'No cruzar', corto: 'No cruces',
+    mensaje: 'El arroyo llegó a No cruzar. Pedimos que nadie cruce el paso.',
+    antiguedad: 'Última lectura hace 2 min', hora: '15 oct, 14:28', siguiente: 'Faltan 90 mm para el nivel del paso' },
+  sindatos: { estado: 'none', nivel: null, lluvia: null, ultimo: 480, palabra: 'Sin datos', corto: 'Sin lecturas desde las 11:30',
+    mensaje: 'No hay lecturas recientes. No se puede avisar con este panel; revisen el arroyo en persona.',
+    antiguedad: 'Sin lecturas desde las 11:30', hora: 'hace 3 h · 15 oct, 11:30',
+    siguiente: 'El último nivel conocido (480 mm a las 11:30) no se usa para decidir.' },
+};
+
+const pct = v => (v / UMBRALES.max * 100).toFixed(2) + '%';
+
+function marca(valor, color, nombre) {
+  return `<div class="gauge-tick" style="left:${pct(valor)};background:${color}"></div>
+          <div class="gauge-label" style="left:${pct(valor)};color:${color}">${nombre}<span>${valor} mm</span></div>`;
+}
+
+function dibujar(id, conAviso) {
+  const d = VARIANTES[id];
+  const claseBanner = { ok: 'banner-ok', warn: 'banner-warn', stop: 'banner-stop', none: 'banner-none' }[d.estado];
+  const sinDatos = d.estado === 'none';
+  document.getElementById('vista').innerHTML = `
+    ${conAviso ? avisoSinRed('14:27') : ''}
+    <div class="page-head"><h1>Estado actual</h1><span class="role">Para: encargado del comité</span></div>
+    <div class="grid grid-estado">
+      <div class="stack">
+        <section class="banner ${claseBanner}" role="status" aria-live="polite">
+          ${forma(d.estado)}
+          <div><div class="banner-word">${d.palabra}</div><div class="banner-msg">${d.corto}</div></div>
+        </section>
+        <section class="card" aria-labelledby="t-nivel">
+          <h2 class="card-title" id="t-nivel">Nivel actual contra el paso</h2>
+          <div class="gauge-top">
+            <span class="value-xl">${sinDatos ? '—' : d.nivel + ' mm'}</span>
+            <span class="muted">${sinDatos ? 'sin lectura vigente' : 'de ' + UMBRALES.paso + ' mm del paso'}</span>
+          </div>
+          <div class="gauge-bar">
+            <div class="gauge-track">${sinDatos ? '' : `<div class="gauge-fill" style="width:${pct(d.nivel)}"></div>`}</div>
+            ${marca(UMBRALES.revisar, 'var(--warn-text)', 'Revisar')}
+            ${marca(UMBRALES.nocruzar, 'var(--stop-text)', 'No cruzar')}
+            ${marca(UMBRALES.paso, 'var(--ink)', 'Paso')}
+          </div>
+          <p class="label">${d.siguiente}</p>
+        </section>
+      </div>
+      <div class="stack">
+        <section class="card" aria-labelledby="t-avisar">
+          <div class="card-head"><h2 class="card-title" id="t-avisar">Qué avisar</h2><span class="tag">Sugerido</span></div>
+          <p class="msg">${d.mensaje}</p>
+          <button class="btn btn-primary" type="button" id="copiar">${icono('copy', 20)}<span>Copiar mensaje</span></button>
+          <p class="caption" style="margin-top:12px">El panel no envía nada. Tú confirmas y avisas.</p>
+        </section>
+        <section class="card" aria-labelledby="t-lluvia">
+          <h2 class="card-title" id="t-lluvia">Lluvia</h2>
+          ${d.lluvia
+            ? `<p class="value-lg">${d.lluvia[0]} mm <span class="muted">en la última hora</span></p>
+               <p class="muted">${d.lluvia[1]} mm en 3 h · ${d.lluvia[2]} mm en 6 h</p>`
+            : `<p class="muted">Sin lecturas vigentes: no se muestra lluvia.</p>`}
+          <p class="caption" style="margin-top:12px">Solo informativa: no cambia el estado.</p>
+        </section>
+        <section class="card" aria-labelledby="t-antig">
+          <h2 class="card-title" id="t-antig">Antigüedad del dato</h2>
+          <p class="value-lg">${d.antiguedad}</p>
+          <p class="muted">${d.hora}</p>
+        </section>
+      </div>
+    </div>`;
+  const b = document.getElementById('copiar');
+  b.addEventListener('click', () => { b.querySelector('span').textContent = 'Mensaje copiado'; });
+}
+
+document.getElementById('cabecera').innerHTML = cabecera('estado');
+montarVariantes(
+  [['normal', 'Normal'], ['revisar', 'Revisar'], ['nocruzar', 'No cruzar'], ['sindatos', 'Sin datos'], ['sinred', 'Sin conexión (Sprint 2B, opcional)']],
+  'revisar',
+  id => id === 'sinred' ? dibujar('revisar', true) : dibujar(id, false)
+);
+</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+.banner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-8) var(--space-10);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  color: var(--state-ink);
+}
+
+.mensaje {
+  margin-top: var(--space-1);
+}
+
+.normal {
+  background: var(--ok-fill);
+}
+
+.review {
+  background: var(--warn-fill);
+}
+
+.stop {
+  background: var(--stop-fill);
+}
+
+/* Sin datos: plano neutro, borde discontinuo y sin sombra. Nunca verde. */
+.nodata {
+  background: var(--surface-sunken);
+  border: var(--stroke-base) dashed var(--border-strong);
+  box-shadow: none;
+  color: var(--ink);
+}

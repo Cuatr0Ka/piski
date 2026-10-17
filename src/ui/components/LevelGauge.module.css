@@ -1,0 +1,55 @@
+.centro {
+  display: grid;
+  justify-items: center;
+  margin-top: var(--space-4);
+}
+
+.arco {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.lectura {
+  position: absolute;
+  right: 0;
+  bottom: var(--space-2);
+  left: 0;
+  display: grid;
+  justify-items: center;
+}
+
+.suave {
+  color: var(--ink-muted);
+}
+
+.leyenda {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-4) 0;
+  padding: 0;
+  list-style: none;
+}
+
+.leyenda li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.punto {
+  flex: none;
+  width: var(--space-3);
+  height: var(--space-3);
+  border-radius: var(--radius-pill);
+}
+
+.nombre {
+  flex: 1;
+}

@@ -1,0 +1,19 @@
+.field {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.select {
+  min-height: var(--control-min);
+  padding: 0 var(--space-4);
+  border: var(--stroke-base) solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface-raised);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.select:hover {
+  background: var(--accent-soft);
+}

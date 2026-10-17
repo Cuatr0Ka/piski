@@ -1,0 +1,24 @@
+/* Tono neutro: plano hundido, sin color de estado. */
+.neutra {
+  background: var(--surface-sunken);
+}
+
+.rotulo {
+  color: var(--ink-muted);
+}
+
+.cabeza {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin: var(--space-1) 0 var(--space-4);
+}
+
+.cabeza svg {
+  flex: none;
+  margin-top: var(--space-1);
+}
+
+.detalle {
+  margin-bottom: var(--space-5);
+}

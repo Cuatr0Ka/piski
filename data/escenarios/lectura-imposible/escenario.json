@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "id": "lectura-imposible",
+  "group": "test",
+  "name": "Prueba: lecturas imposibles",
+  "description": "Lecturas válidas más una de -50 mm y otra de 9990 mm, que el panel descarta y avisa.",
+  "now": "2026-10-15T14:30:00-06:00"
+}
